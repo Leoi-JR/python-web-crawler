@@ -3,7 +3,10 @@
 - [requests](#requests)
     - [方法](#方法)
     - [参数](#参数)
+- [在此处理响应。](#在此处理响应)
 - [requests.Session()](#requestssession)
+- [参数data与json的区别](#参数data与json的区别)
+- [参数data与json的区别](#参数data与json的区别)
 
 <!-- /TOC -->
 # requests
@@ -127,3 +130,58 @@ session.get(
     ...
     ) # 用session就不需要带cookie，内部会将所有cookie收集起来发送
 ```
+# 参数data与json的区别
++ chrome->  
+    1. 
+
+    ```
+    Form Data:
+        phone:861513125555  
+        password:12312312312
+        oneMonth:1
+    ```    
+    上述显示则相当于
+    ```
+    phone=861513125555&password=12312312312&oneMonth=1
+    ```
+    使用data即可
+    ```python
+    reqeusts.post(
+        url=url,
+        data={
+            phone:123123123123,
+            password:asdfasdf
+        }
+    )
+    ```
+    2.  
+    ```
+    Request Payload:
+        {"BaseRequest":{"Uin":981579400,"Sid":"zWvteTWqBop4heoT","Skey":"@crypt_2ccf8ab9_a710cf413c932e201987599558063c8e","DeviceID":"e358217921593270"},"Msg":{"Type":1,"Content":"test","FromUserName":"@60eef3f2d212721fda0aae891115aa7a","ToUserName":"@@6a5403f510a3192454ed1afebd78ec6033d5057c9038d7b943b201f0a74987d4","LocalID":"15300708105840758","ClientMsgId":"15300708105840758"},"Scene":0}
+    ```
+    显示如上则使用json
+    ```python
+    reqeusts.post(
+        url=url,
+        json={
+            phone:123123123123,
+            password:asdfasdf
+        }
+    )
+    ```
+    如果含有中文
+    ```python
+    reqeusts.post(
+        url=url,
+        data=bytes(json.dumps({
+            phone:123123123123,
+            password:asdfasdf
+        }, ensure_ascii=False),encoding=utf-8)
+    )
+    ```
+
++ firefox:  
+
+    - 显示表单数据:对应Chrome的1
+        
+    - 显示JSON:对应Chrome的2
